@@ -8,7 +8,12 @@ export default defineConfig({
   integrations: [react()],
   output: "hybrid",
   experimental: {
-    actions: true
+    actions: true,
   },
-  adapter: cloudflare()
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+      configPath: "wrangler.toml",
+    },
+  }),
 });
