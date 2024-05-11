@@ -1,4 +1,4 @@
-# Cannot bundle Node.js built-in "node:async_hooks"
+# (Fixed) Cannot bundle Node.js built-in "node:async_hooks"
 
 - Using `pnpm`
 - Astro's version from package.json - `"astro": "^4.8.2",`
@@ -8,7 +8,31 @@
   Linux 5.15.146.1-microsoft-standard-WSL2 x86_64 x86_64
     ```
 
-### Error
+## Fix
+- Add `wrangler.toml` to the root of the project
+  ```toml
+  compatibility_flags = ["nodejs_asl"]
+  ```
+- Enable `platformProxy` and set the `configPath` to `wrangler.toml` in `astro.config.mjs`
+  ```javascript
+    adapter: cloudflare({
+    platformProxy: {
+      enabled: true,
+      configPath: "wrangler.toml",
+    },
+  }),
+  ```
+- Add `ssr: { noExternal: ['async_hooks'] }` to `astro.config.mjs`
+  ```javascript
+  vite: {
+    ssr: {
+      external: ["node:async_hooks"],
+    },
+  },
+  ```
+- Check the `astro.config.mjs` file for the complete configuration
+
+### Error (Before Fix)
 
 Just the Error part from the build step
 ```bash
