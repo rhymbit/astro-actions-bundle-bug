@@ -7,8 +7,10 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
   integrations: [react()],
   output: "hybrid",
-  experimental: {
-    actions: true,
+  vite: {
+    ssr: {
+      external: ["node:async_hooks"],
+    },
   },
   adapter: cloudflare({
     platformProxy: {
@@ -16,4 +18,7 @@ export default defineConfig({
       configPath: "wrangler.toml",
     },
   }),
+  experimental: {
+    actions: true,
+  },
 });
